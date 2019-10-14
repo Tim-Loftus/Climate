@@ -1,0 +1,23 @@
+* Encoding: windows-1252.
+
+COMMENT Aggregate Normals File by Station.
+DATASET ACTIVATE DataSet1.
+DATASET DECLARE agg_yr.
+AGGREGATE
+  /OUTFILE='agg_yr'
+  /BREAK=METAR LON LAT
+  /NORM_HIGH=MEAN(NORM_HIGH) 
+  /NORM_LOW=MEAN(NORM_LOW) 
+  /NORM_WATER=SUM(NORM_WATER).
+
+COMMENT Compute Average Normal Temperature.
+DATASET ACTIVATE agg_yr. 
+COMPUTE AVG_TEMP = MEAN(NORM_HIGH, NORM_LOW).
+EXECUTE.
+
+COMMENT Save as a DBF for ArcGIS.
+SAVE TRANSLATE OUTFILE='W:\Accu_Internal_D3_Projects\Data_Research\NORMALS\TABLES\METAR_NORMS.dbf'
+  /TYPE=DBF
+  /VERSION=4
+  /MAP
+  /REPLACE.
